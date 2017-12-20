@@ -25,6 +25,9 @@ public class Main
 	{	
 		try
 		{
+			SatoshiKeypair pair = new SatoshiKeypair((byte)0x23, (byte)0xa3);
+			System.out.println(pair.getBase58());
+			System.out.println(pair.getWiF());
 		}
 		catch (Exception e)
 		{

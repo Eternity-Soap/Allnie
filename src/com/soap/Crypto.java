@@ -6,6 +6,7 @@ import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 
 import org.bouncycastle.crypto.digests.RIPEMD160Digest;
@@ -21,12 +22,12 @@ public class Crypto
 		return null;
 	}
 	
-	public static String getHexEncodedPublicKey(PublicKey publicKey) throws IOException, InvalidKeyException 
+	public static byte[] getHexEncodedPublicKey(PublicKey publicKey) throws IOException, InvalidKeyException 
 	{
 	    ECPublicKeyParameters ecPublicKeyParameters
 	            = (ECPublicKeyParameters) ECUtil.generatePublicKeyParameter(publicKey);
 	    byte[] encoded = ecPublicKeyParameters.getQ().getEncoded(false);
-	    return Hex.toHexString(encoded);
+	    return encoded;
 	}
 	
 	public static byte[] ripemd160hash(byte[] data) throws IOException
@@ -35,18 +36,18 @@ public class Crypto
         d.update (data, 0, data.length);
         byte[] o = new byte[d.getDigestSize()];
         d.doFinal (o, 0);
-        Hex.encode (o, System.out);
-        System.out.println();
+        Hex.encode (o);
+        //System.out.println();
         return o;
 	}
 	
-	public static byte[] addVer(byte[] hash, byte ver)
+	public static byte[] addVer(byte[] input, byte ver)
 	{
-		byte[] newbyte = new byte[21];
+		byte[] newbyte = new byte[input.length+1];
 		newbyte[0] = ver;
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < input.length; i++)
 		{
-			newbyte[i+1] = hash[i];
+			newbyte[i+1] = input[i];
 		}
 		//System.out.println(Hex.toHexString(newbyte));
 		return newbyte;
