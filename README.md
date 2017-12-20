@@ -1,1 +1,5 @@
 Allnie Keychain
+Guiding Principles
+-Currency Customization over gatekeeping: I wanna be able to add any cryptocurrency I want vs having a central party dictate what currency gets added
+-Function over aesthetic:
+The wallet should be functional, friendly enough for advanced users. Aesthetics are designed by the open source community
