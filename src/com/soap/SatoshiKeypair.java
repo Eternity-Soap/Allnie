@@ -1,6 +1,7 @@
 package com.soap;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -17,6 +18,7 @@ import org.bouncycastle.crypto.params.ECKeyGenerationParameters;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.bouncycastle.util.encoders.Hex;
+import static com.google.common.base.Preconditions.checkArgument;
 
 public class SatoshiKeypair 
 {
@@ -32,13 +34,13 @@ public class SatoshiKeypair
 	}
 	
 	AsymmetricCipherKeyPair pair;
-	private byte[] hexPublicKey;
+	private byte[] hexPublicKey = new byte[65];
 	private String base58addr;
 	private byte[] binaryaddr;
 	private byte[] hexPrivateKey = new byte[32];
 	private String privateWiF;
 	
-	public SatoshiKeypair(byte pubver, byte privver)
+	public SatoshiKeypair(Coin coin)
 	{
 		try
 		{
@@ -48,10 +50,10 @@ public class SatoshiKeypair
 			pair = keyGen.generateKeyPair();
 			ECPrivateKeyParameters privParams = (ECPrivateKeyParameters)pair.getPrivate();
 			ECPublicKeyParameters pubParams = (ECPublicKeyParameters) pair.getPublic();
-			removeSignBit(privParams.getD().toByteArray());
+			hexPrivateKey = bigIntegerToBytes(privParams.getD(), 32);
 			hexPublicKey = pubParams.getQ().getEncoded(false);
-			toAddress(pubver);
-			toWiF(privver);
+			toAddress(coin.getPub());
+			toWiF(coin.getPriv());
 		}
 		catch (Exception e)
 		{
@@ -59,18 +61,20 @@ public class SatoshiKeypair
 		}
 	}
 	
-	public void removeSignBit(byte[] raw)
+	public static byte[] bigIntegerToBytes(BigInteger b, int numBytes) //Taken from Bitcoinj
 	{
-		if (raw.length == 32)
-		{
-			hexPrivateKey = raw;
-			return;
-		}
-		for (int i = 0; i < 32; i++)
-		{
-			hexPrivateKey[i] = raw[i+1];
-		}
-	}
+        checkArgument(b.signum() >= 0, "b must be positive or zero");
+        checkArgument(numBytes > 0, "numBytes must be positive");
+        byte[] src = b.toByteArray();
+        byte[] dest = new byte[numBytes];
+        boolean isFirstByteOnlyForSign = src[0] == 0;
+        int length = isFirstByteOnlyForSign ? src.length - 1 : src.length;
+        checkArgument(length <= numBytes, "The given number does not fit in " + numBytes);
+        int srcPos = isFirstByteOnlyForSign ? 1 : 0;
+        int destPos = numBytes - length;
+        System.arraycopy(src, srcPos, dest, destPos, length);
+        return dest;
+    }
 	
 	private void toAddress(byte ver) throws NoSuchAlgorithmException, IOException
 	{

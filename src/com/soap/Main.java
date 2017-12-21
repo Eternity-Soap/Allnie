@@ -1,23 +1,5 @@
 package com.soap;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.MessageDigest;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.Security;
-import java.security.spec.ECGenParameterSpec;
-
-import org.bouncycastle.crypto.params.ECPublicKeyParameters;
-import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
-import org.bouncycastle.util.encoders.Hex;
-import org.bouncycastle.crypto.digests.RIPEMD160Digest;
-
-
 
 public class Main 
 {
@@ -25,13 +7,20 @@ public class Main
 	{	
 		try
 		{
-			SatoshiKeypair pair = new SatoshiKeypair((byte)0x23, (byte)0xa3);
-			System.out.println(pair.getBase58());
-			System.out.println(pair.getWiF());
+			Coin btc = new Coin((byte)0x00, (byte)0x80, "Bitcoin", "BTC");
+			Coin fun = new Coin((byte)0x23, (byte)0xa3, "Funcoin", "FUN");
+			SatoshiKeypair pair = new SatoshiKeypair(btc);
+			for (int i = 0; i < 10000; i++)
+			{
+				System.out.println(pair.getBase58());
+				System.out.println(pair.getWiF());
+				pair = new SatoshiKeypair(fun);
+			}
 		}
 		catch (Exception e)
 		{
 			System.out.println(e.getMessage());
 		} 
+		System.out.println("done");
 	}
 }
