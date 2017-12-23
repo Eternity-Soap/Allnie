@@ -8,8 +8,8 @@ public class Coin
 {
 	private final byte PUBLIC_PREFIX;
 	private final byte PRIVATE_PREFIX;
-	private final String NAME;
-	private final String CODE;
+	public final String NAME;
+	public final String CODE;
 	
 	public Coin(byte pub, byte priv, String name, String code)
 	{

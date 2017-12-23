@@ -1,26 +1,43 @@
 package com.soap;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main 
 {
 	public static void main(String[] args)
 	{	
+		FileUtils.initCoinsFile();
+		List<Coin> list = loadHardcoded();
+		if (FileUtils.loadCoins() != null)
+			list.addAll(FileUtils.loadCoins());
 		try
 		{
-			Coin btc = new Coin((byte)0x00, (byte)0x80, "Bitcoin", "BTC");
-			Coin fun = new Coin((byte)0x23, (byte)0xa3, "Funcoin", "FUN");
-			SatoshiKeypair pair = new SatoshiKeypair(btc);
-			for (int i = 0; i < 10000; i++)
+			SatoshiKeypair pair;
+			for (Coin c : list)
 			{
+				pair = new SatoshiKeypair(c);
+				System.out.println(c.NAME);
 				System.out.println(pair.getBase58());
 				System.out.println(pair.getWiF());
-				pair = new SatoshiKeypair(fun);
 			}
 		}
 		catch (Exception e)
 		{
 			System.out.println(e.getMessage());
 		} 
+		FileUtils.saveCoins(list);
 		System.out.println("done");
 	}
+	
+	public static List<Coin> loadHardcoded()
+	{
+		List<Coin> list = new ArrayList<Coin>();
+		list.add(HardcodedCoins.BTC);
+		list.add(HardcodedCoins.BCH);
+		list.add(HardcodedCoins.LTC);
+		list.add(HardcodedCoins.DOGE);
+		return list;
+	}
 }
+
