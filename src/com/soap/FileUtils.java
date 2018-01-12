@@ -26,6 +26,7 @@ public class FileUtils
 			try 
 			{
 				coins.createNewFile();
+				System.out.println("No coin file found, new one created.");
 			} 
 			catch (IOException e) 
 			{
@@ -52,6 +53,7 @@ public class FileUtils
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("Coins loaded");
 		return list;
 	}
 	
@@ -77,6 +79,7 @@ public class FileUtils
 		{
 			e.printStackTrace();
 		}
+		System.out.println("Coins saved");
 	}
 	
 	public static boolean isHardcoded(Coin coin, List<Coin> hardcoded)

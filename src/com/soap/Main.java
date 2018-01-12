@@ -8,7 +8,7 @@ public class Main
 {
 	public static void main(String[] args)
 	{	
-		Scanner in = new Scanner(System.in);
+		/* Scanner in = new Scanner(System.in);
 		FileUtils.initCoinsFile();
 		List<Coin> list = loadHardcoded();
 		if (FileUtils.loadCoins() != null)
@@ -46,7 +46,22 @@ public class Main
 		} 
 		FileUtils.saveCoins(list);
 		System.out.println("done");
-		in.close();
+		in.close(); */
+		boolean run = true;
+		FileUtils.initCoinsFile();
+		List<Coin> list = loadHardcoded();
+		if (FileUtils.loadCoins() != null)
+			list.addAll(FileUtils.loadCoins());
+		list = delDuplicates(list);
+		while (run)
+		{
+			System.out.println("Welcome to Allnie!");
+			System.out.println("Please make a selection: ");
+			System.out.println("a: List public addresses");
+			System.out.println("b: Add new address");
+			System.out.println("c: Remove address");
+			System.out.println("d: Add coin");
+		}
 	}
 	
 	public static List<Coin> loadHardcoded()
