@@ -43,9 +43,13 @@ public class FileUtils
 		{
 			JsonReader reader = new JsonReader(new FileReader(coins));
 			list = gson.fromJson(reader, coinListType);
+			reader.close();
 		} 
 		catch (FileNotFoundException | NullPointerException e) 
 		{
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return list;
@@ -53,16 +57,35 @@ public class FileUtils
 	
 	public static void saveCoins(List<Coin> list)
 	{
+		for (int i = 0; i < list.size(); i++)
+		{
+			if (isHardcoded(list.get(i), Main.loadHardcoded()))
+			{
+				list.remove(i);
+				i--;
+			}
+		}
+		System.out.println(list.size());
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try
 		{
-			FileWriter writer = new FileWriter(coins);
-			gson.toJson(list.subList(3, list.size() - 1), writer);
+			FileWriter writer = new FileWriter(coins, false);
+			gson.toJson(list, writer);
 			writer.close();
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public static boolean isHardcoded(Coin coin, List<Coin> hardcoded)
+	{
+		for (Coin c : hardcoded)
+		{
+				if (coin.NAME.trim().equals(c.NAME.trim()))
+					return true;
+		}
+		return false;
 	}
 }
