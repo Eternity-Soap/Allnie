@@ -48,20 +48,35 @@ public class Main
 		System.out.println("done");
 		in.close(); */
 		boolean run = true;
-		FileUtils.initCoinsFile();
-		List<Coin> list = loadHardcoded();
+		FileUtils.initFiles();
+		List<Coin> coinlist = loadHardcoded();
+		List<SatoshiKeypair> keylist = new ArrayList<SatoshiKeypair>();
 		if (FileUtils.loadCoins() != null)
-			list.addAll(FileUtils.loadCoins());
-		list = delDuplicates(list);
+			coinlist.addAll(FileUtils.loadCoins());
+		coinlist = delDuplicates(coinlist);
+		printCoins(coinlist);
+		if (FileUtils.loadKeys() != null)
+			keylist = FileUtils.loadKeys();
+		coinlist = delDuplicates(coinlist);
 		while (run)
 		{
 			System.out.println("Welcome to Allnie!");
 			System.out.println("Please make a selection: ");
-			System.out.println("a: List public addresses");
+			System.out.println("a: List addresses");
 			System.out.println("b: Add new address");
 			System.out.println("c: Remove address");
 			System.out.println("d: Add coin");
+			System.out.println("e: Remove coin");
+			run = false;
 		}
+		System.out.println("Printing test key...");
+		System.out.println(keylist.get(0).getCoinname());
+		System.out.println(keylist.get(0).getBase58());
+		System.out.println(keylist.get(0).getWiF());
+		//keylist.add(new SatoshiKeypair(coinlist.get(0)));
+		//System.out.println("New test key added");
+		FileUtils.saveCoins(coinlist);
+		FileUtils.saveKeys(keylist);
 	}
 	
 	public static List<Coin> loadHardcoded()
@@ -93,6 +108,14 @@ public class Main
 				return true;
 		}
 		return false;
+	}
+	
+	public static void printCoins(List<Coin> list)
+	{
+		for (Coin c : list)
+		{
+			System.out.println(c.NAME);
+		}
 	}
 }
 

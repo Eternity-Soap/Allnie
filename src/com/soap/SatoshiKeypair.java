@@ -33,21 +33,23 @@ public class SatoshiKeypair
 		secureRandom = new SecureRandom();
 	}
 	
-	AsymmetricCipherKeyPair pair;
+	//AsymmetricCipherKeyPair pair;
 	private byte[] hexPublicKey = new byte[65];
 	private String base58addr;
 	private byte[] binaryaddr;
 	private byte[] hexPrivateKey = new byte[32];
 	private String privateWiF;
+	private String coinName;
 	
 	public SatoshiKeypair(Coin coin)
 	{
 		try
 		{
+			coinName = coin.NAME;
 			ECKeyPairGenerator keyGen = new ECKeyPairGenerator();
 			ECKeyGenerationParameters keygenParams = new ECKeyGenerationParameters(CURVE, secureRandom);
 			keyGen.init(keygenParams);
-			pair = keyGen.generateKeyPair();
+			AsymmetricCipherKeyPair pair = keyGen.generateKeyPair();
 			ECPrivateKeyParameters privParams = (ECPrivateKeyParameters)pair.getPrivate();
 			ECPublicKeyParameters pubParams = (ECPublicKeyParameters) pair.getPublic();
 			hexPrivateKey = bigIntegerToBytes(privParams.getD(), 32);
@@ -60,6 +62,21 @@ public class SatoshiKeypair
 			System.out.println(e.getClass());
 		}
 	}
+	
+	/*public SatoshiKeypair(byte[] hexPub, byte[] hexPriv, byte pubPrefix, byte privPrefix)
+	{
+		hexPublicKey = hexPub;
+		hexPrivateKey = hexPriv;
+		try
+		{
+			toAddress(pubPrefix);
+		} 
+		catch(Exception e)
+		{
+			System.out.println(e.getClass());
+		}
+		
+	} */
 	
 	public static byte[] bigIntegerToBytes(BigInteger b, int numBytes) //Taken from Bitcoinj
 	{
@@ -112,5 +129,10 @@ public class SatoshiKeypair
 	public String getWiF()
 	{
 		return privateWiF;
+	}
+	
+	public String getCoinname()
+	{
+		return coinName;
 	}
 }
