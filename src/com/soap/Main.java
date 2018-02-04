@@ -146,13 +146,13 @@ public class Main
 		System.out.println("What kind of address would you like to remove?");
 		for (int i = 0; i < coinlist.size(); i++)
 		{
-			System.out.println((i + 1)+" "+coinlist.get(i).NAME);
+			System.out.println((i + 1)+": "+coinlist.get(i).NAME);
 		}
 		
 		input = in.nextLine();
 		coinchoice = Integer.parseInt(input);
 		coinchoice--;
-		for (int i = 0; i < keylist.size(); i++)
+		for (int i = 0; i < keylist.size() - 1; i++)
 		{
 			if (keylist.get(i).getCoinname().equals(coinlist.get(coinchoice).NAME))
 			{
@@ -170,12 +170,13 @@ public class Main
 		if (i == 0)
 		{
 			System.out.println("Error: no addresses of this kind");
+			return;
 		}
 		System.out.println(i + 1 - firstIndex + ": I've changed my mind.");
 		input = in.nextLine();
 		keychoice = Integer.parseInt(input);
 		keychoice = keychoice - 1 + firstIndex;
-		if (keychoice + 1 == i)
+		if (keychoice == i)
 		{
 			System.out.println("Key remove aborted.");
 			return;
@@ -191,22 +192,22 @@ public class Main
 		System.out.println("What kind of address do you want to make?");
 		for (int i = 0; i < coinlist.size(); i++)
 		{
-			System.out.println((i + 1)+" "+coinlist.get(i).NAME);
+			System.out.println((i + 1)+": "+coinlist.get(i).NAME);
 		}
 		
 		input = in.nextLine();
 		choice = Integer.parseInt(input);
 		choice--;
-		if (keylist.size() == 0)
+		if (keylist.size() == 1)
 		{
-			keylist.add(new SatoshiKeypair(coinlist.get(choice)));
+			keylist.add(0, new SatoshiKeypair(coinlist.get(choice)));
 			return;
 		}
-		for (int i = 0; i < keylist.size(); i++)
+		for (int i = 0; i < keylist.size() - 1; i++)
 		{
-			if (i == keylist.size()-1)
+			if (i == keylist.size()-2)
 			{
-				keylist.add(new SatoshiKeypair(coinlist.get(choice)));
+				keylist.add(keylist.size() - 2, new SatoshiKeypair(coinlist.get(choice)));
 				return;
 			}
 			if (!keylist.get(i).getCoinname().equals(keylist.get(i+1).getCoinname()))
@@ -272,13 +273,13 @@ public class Main
 		System.out.println("What kind of key do you want to see?");
 		for (int i = 0; i < coinlist.size(); i++)
 		{
-			System.out.println((i + 1)+" "+coinlist.get(i).NAME);
+			System.out.println((i + 1)+": "+coinlist.get(i).NAME);
 		}
 		
 		input = in.nextLine();
 		coinchoice = Integer.parseInt(input);
 		coinchoice--;
-		for (int i = 0; i < keylist.size(); i++)
+		for (int i = 0; i < keylist.size() - 1; i++)
 		{
 			if (keylist.get(i).getCoinname().equals(coinlist.get(coinchoice).NAME))
 			{
@@ -301,8 +302,9 @@ public class Main
 		System.out.println(i + 1 - firstIndex + ": I've changed my mind.");
 		input = in.nextLine();
 		keychoice = Integer.parseInt(input);
-		keychoice = keychoice - 1 + firstIndex;
-		if (keychoice + 1 == i)
+		keychoice--;
+		keychoice+=firstIndex;
+		if (keychoice == i)
 		{
 			System.out.println("Key dump aborted.");
 			return;
