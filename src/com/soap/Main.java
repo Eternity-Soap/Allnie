@@ -18,6 +18,7 @@ public class Main
 			coinlist.addAll(FileUtils.loadCoins());
 		if (FileUtils.loadKeys() != null)
 			keylist = FileUtils.loadKeys();
+		keylist.add(null);
 		coinlist = delDuplicates(coinlist);
 		in = new Scanner(System.in);
 	}
@@ -38,6 +39,7 @@ public class Main
 			System.out.println("d: Add coin");
 			System.out.println("e: List coins");
 			System.out.println("f: Remove coin");
+			System.out.println("g: View private address (WiF)");
 			System.out.println("x: Exit");
 			choice = in.nextLine();
 			if (choice.equalsIgnoreCase("a"))
@@ -55,13 +57,15 @@ public class Main
 				printCoins();
 			else if (choice.equalsIgnoreCase("f"))
 				removeCoin();
+			else if (choice.equalsIgnoreCase("g"))
+				dumpPriv();
 			else if (choice.equalsIgnoreCase("x"))
 			{
 				System.out.println("Halting...");
 				break;
 			}
 		}
-		//in.close();
+		keylist.remove(keylist.size() - 1);
 		FileUtils.saveCoins(coinlist);
 		FileUtils.saveKeys(keylist);
 	}
@@ -123,7 +127,7 @@ public class Main
 		int i = 1;
 		for (SatoshiKeypair k : keylist)
 		{
-			if (k.getCoinname().equals(coinlist.get(choice).NAME))
+			if (k != null && k.getCoinname().equals(coinlist.get(choice).NAME))
 			{
 				System.out.println(i + ": " + k.getBase58());
 				i++;
@@ -159,9 +163,13 @@ public class Main
 		keychoice = firstIndex;
 		System.out.println("Which address would you like to remove?");
 		int i = 0;
-		for (i = firstIndex; keylist.get(i).getCoinname().equals(coinlist.get(coinchoice).NAME); i++)
+		for (i = firstIndex; keylist.get(i) != null && keylist.get(i).getCoinname().equals(coinlist.get(coinchoice).NAME); i++)
 		{
 			System.out.println(i + 1 - firstIndex + ": " + keylist.get(i).getBase58());
+		}
+		if (i == 0)
+		{
+			System.out.println("Error: no addresses of this kind");
 		}
 		System.out.println(i + 1 - firstIndex + ": I've changed my mind.");
 		input = in.nextLine();
@@ -253,6 +261,53 @@ public class Main
 		}
 		coinlist.remove(choice);
 		System.out.println("Coin removed.");
+	}
+	
+	public static void dumpPriv()
+	{
+		int coinchoice = 0;
+		int keychoice = 0;
+		int firstIndex = 0;
+		String input;
+		System.out.println("What kind of key do you want to see?");
+		for (int i = 0; i < coinlist.size(); i++)
+		{
+			System.out.println((i + 1)+" "+coinlist.get(i).NAME);
+		}
+		
+		input = in.nextLine();
+		coinchoice = Integer.parseInt(input);
+		coinchoice--;
+		for (int i = 0; i < keylist.size(); i++)
+		{
+			if (keylist.get(i).getCoinname().equals(coinlist.get(coinchoice).NAME))
+			{
+				firstIndex = i;
+				break;
+			}
+		}
+		keychoice = firstIndex;
+		System.out.println("For which public key would you like to see the private counterpart?");
+		int i = 0;
+		for (i = firstIndex; keylist.get(i) != null && keylist.get(i).getCoinname().equals(coinlist.get(coinchoice).NAME); i++)
+		{
+			System.out.println(i + 1 - firstIndex + ": " + keylist.get(i).getBase58());
+		}
+		if (i == 0)
+		{
+			System.out.println("Error: no addresses of this kind");
+			return;
+		}
+		System.out.println(i + 1 - firstIndex + ": I've changed my mind.");
+		input = in.nextLine();
+		keychoice = Integer.parseInt(input);
+		keychoice = keychoice - 1 + firstIndex;
+		if (keychoice + 1 == i)
+		{
+			System.out.println("Key dump aborted.");
+			return;
+		}
+		System.out.println("Private key for " + keylist.get(keychoice).getBase58() + " is " + keylist.get(keychoice).getWiF());
 	}
 }
 
