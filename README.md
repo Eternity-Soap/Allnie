@@ -13,4 +13,4 @@
 
 So the journey begins! Will you be a part of it?
 
-### Join the Discord here: https://discord.gg/xrkT4GF
+### Join the Telegram: https://t.me/joinchat/HmCzvRGpKNVRjKj3GGDHIQ to contact us directly! :) 
