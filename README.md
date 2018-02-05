@@ -14,3 +14,14 @@
 So the journey begins! Will you be a part of it?
 
 ### Join the Telegram: https://t.me/joinchat/HmCzvRGpKNVRjKj3GGDHIQ to contact us directly! :) 
+
+## ALPHA CLI Release Instructions
+
+Site: https://github.com/schyczewski/Allnie/releases/tag/v0.0.1
+
+
+Navigate to the directory where the jar is in the command prompt by typing 'cd '
+and then dragging the folder that the jar is in to the command window
+then hit enter
+after that, type in 'java -jar allnie.jar'
+
