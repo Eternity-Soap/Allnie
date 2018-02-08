@@ -13,7 +13,7 @@
 
 So the journey begins! Will you be a part of it?
 
-### Join the [Telegram](https://t.me/joinchat/HmCzvRGpKNVRjKj3GGDHIQ to contact with us directly!)  :) 
+### Join the [Telegram](https://t.me/joinchat/HmCzvRGpKNVRjKj3GGDHIQ) to contact with us directly!  :) 
 
 ## ALPHA CLI Release Instructions
 
