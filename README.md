@@ -20,7 +20,7 @@ So the journey begins! Will you be a part of it?
 Site: https://github.com/schyczewski/Allnie/releases/tag/v0.0.1
 
 
-+# Windows
+# Windows
 
  1. Navigate to the directory where the jar is in the command prompt by typing 'cd '
 and then 
